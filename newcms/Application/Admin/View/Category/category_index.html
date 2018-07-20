@@ -1,0 +1,327 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="lib/PIE_IE678.js"></script>
+<![endif]-->
+<link href="__PUBLIC__/Admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>分类管理</title>
+</head>
+<body>
+<nav class="breadcrumb">
+	<i class="Hui-iconfont">&#xe67f;</i> 首页 
+	<span class="c-gray en">&gt;</span> 分类管理
+	<span class="c-gray en">&gt;</span> 分类管理 
+</nav>
+<div class="pd-20">
+
+	<!-- 添加分类开始 -->
+	<form action="{:U('Category/category_add')}" method="post" class="form form-horizontal AdminRule hide" id="form-admin-add">
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>上级分类：</label>
+			<div class="formControls col-4">
+				<span class="select-box">
+					<select class="select" name="pid" size="1">
+						<option value="0">顶级分类</option>
+						<volist name="catelist" id="vo">
+							<option value="{$vo.id}" <if condition="$vo['level'] eq 2">disabled="disabled"</if>>{$vo.level|str_repeat='&nbsp; &nbsp; ',###}{$vo.title}</option>
+						</volist>
+					</select>
+				</span>
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>分类名：</label>
+			<div class="formControls col-4">
+				<input type="text" class="input-text" value="" placeholder="请输入2至8位字符" name="name" datatype="*2-8" nullmsg="分类名不能为空">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>排序：</label>
+			<div class="formControls col-4">
+				<input type="number" class="input-text" value="" name="order_number" datatype="n" nullmsg="分类排序不能为空">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<div class="col-9 col-offset-3">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存并提交</button>
+			<button class="btn btn-default radius" type="reset" onclick="rule_hide()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+	<!-- 添加分类结束 -->
+
+	<!-- 分类列表开始 -->
+	<div class="cl pd-5 bg-1 bk-gray mt-20 mb-15">
+		<span class="l">
+			<a href="javascript:;" onclick="rule_add()" class="btn btn-primary radius">
+				<i class="Hui-iconfont">&#xe600;</i> 添加分类
+			</a>
+			<a href="javascript:;" onclick="rule_show(this,0,0,1)" class="btn btn-success radius">
+				<i class="Hui-iconfont">&#xe65a;</i> 展开
+			</a>
+		</span>
+		<span class="r">共有数据：<strong id="count"></strong> 条</span> 
+	</div>
+	<table class="table table-border table-bordered table-bg table-hover table-sort" id="fond_table">
+		<thead>
+			<tr>
+				<th scope="col" colspan="12">分类列表</th>
+			</tr>
+			<tr class="text-c">
+				<th>ID</th>
+				<th>分类名</th>
+				<th>排序</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+	</table>
+	<!-- 分类结束 -->
+</div>			
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/layer/2.4/layer/layer.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/icheck/jquery.icheck.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/Validform/5.3.2/Validform.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/Validform/5.3.2/jquery.form.js"></script>    
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.admin.js"></script> 
+<script type="text/javascript">
+	var table = $('.table-sort').dataTable({
+		processing: true,
+		serverSide: true,
+	    ajax: {
+	        "url":"{:U('Category/category_index')}",
+	    },
+		bStateSave: true,//状态保存
+		aLengthMenu : [500],
+		bProcessing : true,
+		bAutoWidth: false,
+		bFilter : true, //是否启动过滤、搜索功能
+		bInfo : true, //是否显示页脚信息，DataTables插件左下角显示记录数  
+		createdRow: function ( row, data, index ) {
+			var className = data.pid != 0 ? 'pidAll hide' : '';
+			$(row).addClass('text-c pid_'+data.pid+' '+className);
+			$(row).attr('data-id',data.id);
+			$('#count').html(data.recordsFiltered);
+		},
+	    aoColumns: [
+	        { "mData": "id" },
+	        { "mData": "name" },
+			{
+	            "render": function (data, type, full, meta) {
+	            	var html = '<input type="text" class="input-text text-l" style="width:76px; text-indent: '+(full.level)*2+'em;" placeholder="数字" name="newOrderNumber" value="'+full.order_number+'" data-id="'+full.id+'" data-name="'+full.order_number+'">';
+				    return html;
+	            },
+	            "bSortable": false
+	        },
+	        {
+	            "sClass": "td-manage",
+	            "render": function (data, type, full, meta) {
+					html = '';
+					html += '<a title="编辑" href="javascript:;" onclick="layer_show(`分类编辑`,`__URL__/category_upload/id/'+full.id+'`)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>编辑</a></if>';
+					html += '<a title="删除" href="javascript:;" onclick="category_delete(this,'+full.id+')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除 </a>';
+					if(full.num != 0 && full.level==0){
+						html += '<a title="查看子分类" href="javascript:;" onclick="rule_show(this,'+full.level+','+full.id+')" class="ml-5 navShow" style="text-decoration:none"><i class="Hui-iconfont">&#xe600;</i>查看子分类</a>';
+					}
+
+				    return html;
+	            },
+	            "bSortable": false
+	        }
+	    ]
+	});
+	
+	$('#fond_table_filter').hide();//隐藏搜索框，使用自定义的搜索框
+	$("#Huiform input").on('change',function(){table.fnFilter();});
+
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+	$("#form-admin-add").Validform({
+		tiptype:2,
+		ajaxPost:true,
+		showAllError:true,
+		beforeSubmit:function(curform){
+			curform.ajaxSubmit({
+				type:"POST",
+				url:"{:U('Category/category_add')}",
+				success:function(response, status, xhr){
+					if(response.status == 1){
+						layer.msg(response.info, {icon: 1,time:1000});
+						$("#fond_table").dataTable().fnClearTable();
+					}else{
+						layer.msg(response.info, {icon: 2,time:1000});
+					}
+				}
+			});
+			return false;
+		}		
+	});
+
+	/*子分类-显示隐藏*/
+	function rule_show(obj,level,id,type) {
+		if(type > 0){
+			if(type == 1){
+				$(obj).parent().append('<a href="javascript:;" onclick="rule_show(this,0,0,2)" class="btn btn-success radius"><i class="Hui-iconfont">&#xe65b;</i> 关闭</a>');
+				$(obj).remove();
+				$(".pidAll").fadeIn();
+				$(".navShow").html('<i class="Hui-iconfont">&#xe6a1;</i>关闭子分类');
+			}else if(type == 2){
+				$(obj).parent().append('<a href="javascript:;" onclick="rule_show(this,0,0,1)" class="btn btn-success radius"><i class="Hui-iconfont">&#xe65a;</i> 展开</a>');
+				$(obj).remove();
+				$(".pidAll").fadeOut();
+				$(".navShow").html('<i class="Hui-iconfont">&#xe600;</i>查看子分类');
+			}
+		}else{
+			if(level == 0){
+				if($(".pid_"+id).css("display")=="none"){
+					$(obj).html('<i class="Hui-iconfont">&#xe6a1;</i>关闭子分类');
+					$(".pid_"+id).fadeIn();
+				}else{
+					$(obj).html('<i class="Hui-iconfont">&#xe600;</i>查看子分类');
+					$(".pid_"+id).each(function(k,v){
+						var did = $(this).attr('data-id');
+						$(".pid_"+did).fadeOut();
+						$(this).find('.navShow').html('<i class="Hui-iconfont">&#xe600;</i>查看子分类');
+					});
+					$(".pid_"+id).fadeOut();
+				}		    	
+			}else if(level == 1){
+				if($(".pid_"+id).css("display")=="none"){
+					$(obj).html('<i class="Hui-iconfont">&#xe6a1;</i>关闭子分类');
+					$(".pid_"+id).fadeIn();
+				}else{
+					$(obj).html('<i class="Hui-iconfont">&#xe600;</i>查看子分类');
+					$(".pid_"+id).fadeOut();
+				}	
+			}
+		}
+	}
+
+	/*分类-修改分类状态*/
+	function rule_state(obj,id,status){
+		var text = $(obj).attr('title');
+		layer.confirm('确定要'+text+'？',function(index){
+			$.ajax({
+				url : "{:U('Category/category_upload')}",
+				type : 'POST',
+				data : {id:id,status:status},
+				success :function(data){
+					if(data.status == 1 && data.type == 0){
+						$(obj).parents("tr").find(".td-manage").prepend('<a title="启用" onClick="rule_state(this,'+id+','+data.type+')" href="javascript:;" tyle="text-decoration:none"><i class="Hui-iconfont">&#xe615;启用</i></a>');
+						$(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">禁用</span>');
+						$(obj).remove();
+						layer.msg(data.info,{icon: 1,time:1000});
+					}else if(data.status == 1 && data.type == 1){
+						$(obj).parents("tr").find(".td-manage").prepend('<a title="禁用" onClick="rule_state(this,'+id+','+data.type+')" href="javascript:;" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;禁用</i></a>');
+						$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">启用</span>');
+						$(obj).remove();
+						layer.msg(data.info, {icon: 1,time:1000});		
+					}else{
+						layer.msg(data.info, {icon: 2,time:1000});	
+					}
+				}
+			});
+		});
+	}
+
+	/*分类-修改分类名*/
+	$(document).on('change','input[name="newTitle"]',function(){
+		var newTitle = $(this).val();
+		var oldName = $(this).data('name');
+		var id = $(this).data('id');
+
+		if(newTitle.length == 0){
+			layer.msg('请填写分类名！', {icon: 1,time:1000});
+			$(this).val(oldName);
+		}else{
+			$.ajax({
+				url : "{:U('Category/category_upload')}",
+				type : 'POST',
+				data : {id:id,title:newTitle,status:-1},
+				success :function(data){
+					if(data.status == 1){
+						layer.msg(data.info, {icon: 1,time:1000});
+					}else{
+						layer.msg(data.info, {icon: 2,time:1000});
+						$(this).val(oldName);
+					}
+				}
+			});	
+		}
+	});
+
+
+	/*菜单-修改排序*/
+	$(document).on('change','input[name="newOrderNumber"]',function(){
+		var newOrderNumber = $(this).val();
+		var oldName = $(this).data('name');
+		var id = $(this).data('id');
+
+		if(newOrderNumber.length == 0){
+			layer.msg('请输入数字为菜单排序！', {icon: 1,time:1000});
+			$(this).val(oldName);
+		}else{
+			$.ajax({
+				url : "{:U('Category/category_upload')}",
+				type : 'POST',
+				data : {id:id,order_number:newOrderNumber,status:-1},
+				success :function(data){
+					if(data.status == 1){
+						layer.msg(data.info, {icon: 1,time:1000});
+						$("#fond_table").dataTable().fnClearTable();
+					}else{
+						layer.msg(data.info, {icon: 2,time:1000});
+						$(this).val(oldName);
+					}
+				}
+			});	
+		}
+	});
+
+	/*分类-删除*/
+	function category_delete(obj,id){
+		layer.confirm('确认要删除吗？',function(index){
+			$.ajax({
+				url : "{:U('Category/category_delete')}",
+				type : 'POST',
+				data : {id:id},
+				success : function(data){
+					if(data.status == 1){
+						layer.msg(data.info,{icon:1,time:1000});
+						$("#fond_table").dataTable().fnClearTable();
+					}else{
+						layer.msg(data.info,{icon:2,time:2000});
+					}
+				}
+			});	
+		});
+	}
+
+	function rule_add(){$('.AdminRule').show();}
+	function rule_hide(){$('.AdminRule').hide();}
+</script>
+</body>
+</html>

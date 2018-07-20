@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="lib/PIE_IE678.js"></script>
+<![endif]-->
+<link href="__PUBLIC__/Admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>修改菜单</title>
+</head>
+<body>
+<div class="pd-20">
+	<form action="" method="post" class="form form-horizontal" id="form-admin-add">
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>上级菜单：</label>
+			<div class="formControls col-4">
+				<span class="select-box">
+					<select class="select" name="pid" size="1">
+						<option value="0">顶级菜单</option>
+						<volist name="NavList" id="vo">
+							<option value="{$vo.id}" <if condition="$vo['id'] == $NavFind['pid']">selected='selected'</if>  >{$vo.level|str_repeat='&nbsp; &nbsp; ',###}{$vo.name}</option>
+						</volist>
+					</select>
+				</span>
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>菜单名：</label>
+			<div class="formControls col-4">
+				<input type="text" class="input-text" value="{$NavFind.name}" placeholder="请输入2至8位字符" name="name" datatype="*2-8" nullmsg="菜单名不能为空">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>链接：</label>
+			<div class="formControls col-4">
+				<input type="text" class="input-text" value="{$NavFind.url}" placeholder="输入模块/控制器/方法即可 例如 Admin/Nav/index" name="url" datatype="*" nullmsg="链接不能为空">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3">图标：</label>
+			<div class="formControls col-4">
+				<input type="text" class="input-text" value="{$NavFind.ico}" placeholder="顶级菜单请为它设置图标 例如  & #xe62d;" name="ico" >
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3">提示：</label>
+			<div class="formControls col-4">
+				图标为控制左侧导航顶级栏目前图标样式，具体可查看Hui-admin样式或单击 <a href="http://www.h-ui.net/Hui-3.7-Hui-iconfont.shtml" class="c-red" target="_blank">这里</a> 查看图标样式
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>排序：</label>
+			<div class="formControls col-4">
+				<input type="text" class="input-text" value="{$NavFind.order_number}" placeholder="请为菜单设置排序" name="order_number" datatype="n" nullmsg="排序不能为空">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<div class="col-9 col-offset-3">
+			<input type="hidden" class="input-text" name="id" value="{$NavFind.id}">
+			<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存并提交</button>
+			<button class="btn btn-default radius" type="reset" onclick="nav_hide()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/Validform/5.3.2/Validform.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/Validform/5.3.2/jquery.form.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/layer/2.4/layer/layer.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.admin.js"></script> 
+<script type="text/javascript">
+$(function(){
+	$("#form-admin-add").Validform({
+		tiptype:2,
+		ajaxPost:true,
+		showAllError:true,
+		beforeSubmit:function(curform){
+			curform.ajaxSubmit({
+				type:"POST",
+				url:"{:U('Nav/nav_upload')}",
+				success:function(response, status, xhr){
+					if(response.status == 1){
+						layer.msg(response.info, {icon: 1,time:1000});
+						setTimeout(function(){window.parent.location.reload();},1300);
+					}else{
+						layer.msg(response.info, {icon: 2,time:1000});
+					}
+				}
+			});
+			return false;
+		}
+	});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+ <head> 
+  <meta charset="gb2312" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" /> 
+  <title>{$baseinfo.title}</title> 
+  <met<meta name="keywords" content="{$baseinfo.keywords}" /> 
+  <meta name="description" content="{$baseinfo.description}" /> 
+  <link type="text/css" rel="stylesheet" href="__PUBLIC__/Home/css/m.css?v=112112" /> 
+  <link href="__PUBLIC__/Home/css/appindex-down.css?v=12" rel="stylesheet" /> 
+  <link href="__PUBLIC__/Home/css/style1.css?v=2112111" rel="stylesheet" /> 
+  <link href="__PUBLIC__/Home/icon/iconfont.css?v=2311" rel="stylesheet" /> 
+  <link rel="icon" href="__PUBLIC__/Home/images/favicon.ico" type="image/x-icon" /> 
+ </head> 
+ <body> 
+  <!-- 广告 start-->
+  <div class="header">
+    <p align="center">
+      <b>
+        <font size="4" color="#008000">
+          <a href="/" style="text-decoration: none">
+            <span style="width: 15%;float: left;border-right: 1px solid #D8E9F9;color: #fff;background: #d43686;line-height: 250%;">首页</span>
+            <font color="#FF0000">{$baseinfo.title}</font>
+          </a>
+        </font>
+<!--         <font size="4" color="#FF0000">&nbsp;</font>
+        <font size="4" color="#008000">
+          <a href="/" style="text-decoration: none"><font color="#FF0000">qweqeqqeqq</font></a>
+        </font> -->
+      </b>
+    </p>
+  </div>
+<!--   <div class="downApp downApp_fixed_bottom">
+    <a class="downApp_close" id="gbcs" href="javascript:;"></a>
+    <a class="downApp_Banner clientDownloadButton" href="http://xin.9799929.com/19624.html">
+      <img src="__PUBLIC__/Home/images/Logo9929.png" class="downApp_logo">
+      <img src="__PUBLIC__/Home/images/downButton.png" class="downApp_button">
+      <p class="downApp_title">299</p><p class="downApp_desc">12121</p>
+    </a>
+  </div> -->
+   <!-- end -->
+  	<div class="nav"> 
+      <if condition="empty($data) neq true">
+        <volist name="data" id="vo">
+        <ul>
+          <p class="p-title">{$vo.name}</p>
+          <if condition="empty($vo.data) neq true">
+                <volist name="vo.data" id="vo2">
+              <li><a href="{:U('List/index',array('cid'=>$vo2[id],'pid'=>$vo[id]))}">{$vo2.name}</a></li>
+            </volist>
+          </if>
+        </ul>
+        </volist>
+      </if>
+    </div> 
+   	<ul class="last-ul" data-title='true'>
+     	<p class="last-title"></p>
+   	</ul>
+    <div class="menu" id="menu">
+     	<div class="gg1">
+      	<!-- 广告 -->
+      	<!-- <script src="__PUBLIC__/Home/js/gg1.js"></script> -->
+     	</div>
+    </div> 
+    <div id="top_box"></div> 
+    <div class="wrap mt20" style="padding-top:10px;background:#fff"> 
+      <div class="box movie_list"> 
+        <ul> 
+          <if condition="empty($content) neq true">
+            <if condition="$pid eq 2">
+            <volist name="content" id="vc">
+              <li>
+                <a href="{:U('List/details',array('id'=>$vc[id]))}"> 
+                  <img src="{$vc.cover}" class="cover-video"/>
+                  <div class="overfloellipsis">{$vc.title}</div>
+                </a>
+              </li>
+            </volist>
+            <else/>
+            <volist name="content" id="vc">
+              <span class="overfloellipsis list-fl">
+                <a href="{:U('List/details',array('id'=>$vc[id]))}" title="{$vc.title}">{$vc.title}</a>
+              </span>
+              <em class="fr">{$vc.create_time|date="Y-m-d",###}</em></li>
+            </volist>
+            </if>
+          </if>
+        </ul> 
+        <div class="clear"></div> 
+        <div class="container">
+          <ul class="pager pagebreak-reset1 pages">
+            {$page}
+          </ul>
+        </div>
+      </div> 
+    </div> 
+
+    <div class="mt10"></div> 
+	<div class="footer">{$baseinfo.keywords}</div>
+	<div id="top_sec" style="position: fixed;top: 76%;left: 84%;width: 50px;height: 50px;line-height: 50px;text-align: center;background: #d43686;opacity: 0.5;border-radius: 25px;color: #fff;font-size: 43px;display:none">
+		<i class="iconfont icon-icon-test" style="font-size: 38px;"></i>
+	</div>
+    <!-- <div class="footer">APP测试</div> -->
+   	<!-- 统计 -->
+  	<!--  <div style="display:none">
+      <script type="text/javascript" src="__PUBLIC__/Home/js/tj (2).js"></script>
+      </div>    -->
+    <script src="__PUBLIC__/Home/js/jquery-1.10.2.min.js"></script>
+    <script>
+      $('#gbcs').click(function(){
+        $('.downApp_fixed_bottom').hide();
+      })
+      $('.last-ul').click(function(){
+        var _obj = $(this);
+        if(_obj.attr('data-title')=='true'){
+          _obj.attr('data-title','false').children().html('点击展开全部分类 <i class="iconfont icon-jiantouxia" style="font-size: 17px;"></i>');
+        }else{
+          _obj.attr('data-title','true').children().html('点击收起全部分类 <i class="iconfont icon-jiantoushang" style="font-size: 17px;"></i>');
+        }
+        $('.nav').slideToggle();
+      })
+
+      //设置或获取对象指定的文件名或路径。
+      var pathname = window.location.pathname;
+      if(pathname=='/index/index.html' || pathname==''|| pathname=='/'){
+        $('.last-ul').attr('data-title','true').children().html('点击收起全部分类 <i class="iconfont icon-jiantoushang" style="font-size: 17px;"></i>');
+        $('.nav').show();
+      }else{
+        $('.last-ul').attr('data-title','false').children().html('点击展开全部分类 <i class="iconfont icon-jiantouxia" style="font-size: 17px;"></i>');
+        $('.nav').hide();
+      }
+      $('.nav>ul>li').click(function(){
+        $(this).css('background','#fff')
+      })
+
+      $(function() {
+       $(window).scroll(function() {
+        /* 判断滚动条 距离页面顶部的距离 100可以自定义*/
+        if($(window).scrollTop() > 100) {
+         $("#top_sec").fadeIn(100); /* 这里用.show()也可以 只是效果太丑 */
+        } else {
+         $("#top_sec").fadeOut(100);
+        }
+       });
+      });
+      /* 给图片元素绑定 回到顶部的事件 */
+      $(function() {
+       $("#top_sec").on("click", function() {
+        $('body,html').animate({
+         scrollTop: 0
+        }, 1000);
+        return false;
+       });
+      });
+    </script>
+ </body>
+</html>  	
+

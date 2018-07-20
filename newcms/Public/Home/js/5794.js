@@ -1,0 +1,1 @@
+var VideoListJson=[['ckplayer',['\u7B2C1\u96C6$https://201712mp4.89soso.com/20180430/23/1/xml/91_b64c421263524bf385e152d3d90c8897.mp4$ckplayer']]],urlinfo='http://'+document.domain+'/video/5794.html?5794-<from>-<pos>';

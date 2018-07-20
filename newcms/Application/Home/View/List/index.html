@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <title>{$baseinfo.title}</title> 
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+  <meta name="robots" content="all" /> 
+  <met<meta name="keywords" content="{$baseinfo.keywords}" /> 
+  <meta name="description" content="{$baseinfo.description}" /> 
+  <link type="text/css" rel="stylesheet" href="__PUBLIC__/Home/css/style.css?v=31" /> 
+ </head> 
+ <body>
+  <div class="nav_bar"> 
+   <div class="wrap"> 
+    <span class="domain"><a href="/"><b><font color="#ffffff" size="6"><script language="javascript">host = window.location.host;document.write(host)</script></font></b></a></span>
+    <div class="nav_bar_r"> 
+     <font color="#ffffff" size="4">{$baseinfo.title}</font>
+    </div> 
+   </div> 
+  </div> 
+  <div id="top_box"> 
+   <div class="wrap mt20 clearfix"> 
+    <div class="box top_box"> 
+     <ul> 
+      <!-- <script type="text/javascript" language="javascript" src="__PUBLIC__/Home/js/xx1.js"></script>  -->
+     </ul> 
+    </div> 
+   </div> 
+  </div> 
+  <div id="header_box"> 
+   <div class="wrap mt20 nav"> 
+    <if condition="empty($data) neq true">
+      <volist name="data" id="vo">
+        <ul class="nav_menu clearfix"> 
+          <li><a href="{:U('List/index',array('pid'=>$vo[id]))}">{$vo.name}</a></li> 
+          <if condition="empty($vo.data) neq true">
+            <volist name="vo.data" id="vo2">
+              <li><a href="{:U('List/index',array('cid'=>$vo2[id],'pid'=>$vo[id]))}">{$vo2.name}</a></li> 
+            </volist>
+          </if>
+        </ul>
+      </volist>
+    </if>
+   </div> 
+  </div> 
+
+  <div id="top_box"> 
+   <div class="wrap mt20 clearfix"> 
+    <div class="box top_box"> 
+     <ul> 
+      <!-- <script type="text/javascript" language="javascript" src="__PULIC__/Home/js/xx2.js"></script> --> 
+     </ul> 
+    </div> 
+   </div> 
+  </div> 
+  <div id="header_box"></div> 
+  <div id="top_box"></div> 
+  <div class="wrap mt20">
+   <div class="box cat_pos clearfix"> 
+      <span>您的位置：<a href="/">首页</a>&nbsp;&nbsp;&raquo;&nbsp;&nbsp;<a href="">{$name}</a></span>
+      <span class="cat_pos_r">共有<em>{$count}</em>信息</span>
+   </div> 
+  </div> 
+  <div class="wrap mt20"> 
+   <div class="box <if condition='$pid eq 2'>movie_list<else/>list channel</if>"> 
+    <ul> 
+    <if condition='$pid neq 2'>
+     <div id="text_box">
+      <script type="text/javascript" src="__PULIC__/Home/js/ttwz.js" charset="gb2312"></script> 
+     </div> 
+    </if>
+        <volist name="content" id="vc">
+          <li>
+            <a href="{:U('List/details',array('id'=>$vc[id]))}" target="_blank">
+              <if condition="$pid eq 2">
+                <img src="{$vc.cover}" /><h3>{$vc.title}</h3>
+              <else/>
+                <span>{$vv.create_time|date="m-d",###}</span> {$vc.title}
+              </if>
+            </a>
+
+          </li> 
+        </volist>
+    </ul> 
+    <div class="clear"></div> 
+    <div class="pagination pages">
+    　　{$page}
+    </div>
+   </div> 
+  </div> 
+
+  <div id="top_sec" style="position: fixed;top: 76%;left: 84%;width: 50px;height: 50px;line-height: 50px;text-align: center;background: #d43686;opacity: 0.5;border-radius: 25px;color: #fff;font-size: 43px;display:none"><i class="iconfont icon-icon-test" style="font-size: 38px;"></i></div>
+  <div id="top_box"> 
+   <div class="wrap mt20 clearfix"> 
+    <div class="box top_box"> 
+     <!-- <script type="text/javascript" language="javascript" src="__PULIC__/Home/js/xx3.js"></script>  -->
+    </div> 
+    <div class="wrap"> 
+     <div class="copyright"> 
+      <div style="line-height:50px"> 
+       <div style="line-height:20px">
+        <b> <a href="" style="text-decoration: none"> <font color="#000000">测试11111111111111 </font></a></b>
+        <b> <a href=""><font color="#000000">搜狗</font></a></b> 
+        <b><a href=""><font color="#000000">好搜</font></a></b>
+        <b> <a href=""><font color="#000000">百度</font></a></b>
+        <p></p>
+        <div style="line-height:20px">
+         <b>警告：本站禁止未滿18周歲訪客瀏覽,如果當地法律禁止請自覺離開本站！收藏本站：請使用Ctrl+D進行收藏</b> 
+        </div>色色资源网,吉吉影音AV资源,色色AV资源，夜夜撸  
+        <b>| 永久网址：<font color="#FF0000" size="3"><script language="javascript">host = window.location.host;document.write(host)</script></font></b> 
+       </div> 
+      </div> 
+      <!-- <script type="text/javascript" src="__PULIC__/Home/js/xxt.js?v=2" charset="gb2312"></script>  -->
+      <!-- 统计 -->
+      <!-- <div style="display:none">
+       <script src="__PULIC__/Home/js/tj.js"></script>
+      </div>  -->
+      <script>
+    // (function(){
+    //     var bp = document.createElement('script');
+    //     var curProtocol = window.location.protocol.split(':')[0];
+    //     if (curProtocol === 'https') {
+    //         bp.src = 'https://zz.bd/media.com/linksubmit/push.js';        
+    //     }
+    //     else {
+    //         bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    //     }
+    //     var s = document.getElementsByTagName("script")[0];
+    //     s.parentNode.insertBefore(bp, s);
+    // })();
+    </script>  
+     </div>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>

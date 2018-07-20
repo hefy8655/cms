@@ -1,0 +1,180 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<LINK rel="Bookmark" href="/favicon.ico" >
+<LINK rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="lib/PIE_IE678.js"></script>
+<![endif]-->
+<link href="__PUBLIC__/Admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>管理员列表</title>
+</head>
+<body>
+<nav class="breadcrumb">
+	<i class="Hui-iconfont">&#xe67f;</i> 首页 
+	<span class="c-gray en">&gt;</span> 管理员管理 
+	<span class="c-gray en">&gt;</span> 管理员列表 
+	<a class="btn btn-success radius btn-refresh r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20">
+	<form class="form-horizontal" method="post" action="">
+		<div class="text-c"> 日期范围：
+			<input type="text" onfocus="WdatePicker({maxDate:'#F{ $dp.$D(\'datemax\')||\'%y-%M-%d\'}'})" id="datemin" class="input-text Wdate" style="width:120px;" name="datemin">
+			-
+			<input type="text" onfocus="WdatePicker({minDate:'#F{ $dp.$D(\'datemin\')}',maxDate:'%y-%M-%d'})" id="datemax" class="input-text Wdate" style="width:120px;" name="datemax">
+			<input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" name="username">
+			<button type="submit" class="btn btn-success" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜日期范围/发布人</button>
+		</div>
+	</form>
+	<div class="cl pd-5 bg-1 bk-gray mt-20 mb-15"> 
+		<span class="l">
+			<a _href="{:U('Mall/admin_add')}" data-title="添加发布人" class="btn btn-primary radius" onClick="Hui_admin_tab(this)">
+				<i class="Hui-iconfont">&#xe600;</i> 添加发布人
+			</a>
+		</span>
+		<span class="r">共有数据：<strong>{$count}</strong> 条</span> 
+	</div>
+	<table class="table table-border table-bordered table-bg table-hover table-sort" id="fond_table">
+		<thead>
+			<tr>
+				<th scope="col" colspan="9">发布人列表</th>
+			</tr>
+			<tr class="text-c">
+				<th>ID</th>
+				<th>头像</th>
+				<th>发布人</th>
+				<th>创建时间</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<volist name="admin_list" id="vo">
+				<tr class="text-c">
+					<td>{$vo.id}</td>
+					<td><img src="{$vo.image}" width="50px;"></td>
+					<td>{$vo.username}</td>
+					<td>{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+					<td class="td-status">
+						<span class="label {$vo.state|searchDict='STATUSLABEL'} radius">{$vo.state|searchDict="STATUSCHANGES"}</span>
+					</td>
+					<td class="td-manage">
+						<a style="text-decoration:none" onClick="admin_state(this,{$vo.id},{$AdminInfo.id},{$vo.state})" href="javascript:;" title="{$vo.state|searchDict='STATUSTITLE'}">
+							<i class="Hui-iconfont">{$vo.state|searchDict="STATUSICONFOUNT"}{$vo.state|searchDict='STATUSTITLE'}</i>
+						</a>
+						<a title="修改密码" href="javascript:;" onclick="admin_upload('修改密码','{:U('Mall/admin_upload',array('id'=>$vo[id]))}')" class="ml-5" style="text-decoration:none">
+							<i class="Hui-iconfont">&#xe6df;修改密码</i>
+						</a>
+						<a title="删除" href="javascript:;" onclick="admin_del(this,{$vo.id},{$AdminInfo.id})" class="ml-5" style="text-decoration:none">
+							<i class="Hui-iconfont">&#xe6e2;删除</i>
+						</a>
+					</td>
+				</tr>
+			</volist>
+		</tbody>
+	</table>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/jquery/1.9.1/jquery.min.js"></script>  
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/layer/2.1/layer.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/laypage/1.2/laypage.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.admin.js"></script> 
+<script type="text/javascript">
+$(function(){
+	$('.table-sort').dataTable({
+		"aaSorting": [[ 1, "desc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+		"aLengthMenu" : [10, 20, 30, 40, 50, 100, 200],
+		"bProcessing" : true,
+		"bAutoWidth": false,
+		"aoColumnDefs": [
+		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+		  {"orderable":false,"aTargets":[0]}// 制定列不参与排序
+		]
+	});
+});
+/*管理员-增加*/
+function admin_add(obj,url){
+	
+}
+
+/*管理员-单个删除*/
+function admin_del(obj,id,sid){
+	layer.confirm('确认要删除吗？',function(index){
+		if(id == sid){
+			layer.msg('无法执行删除自己的操作！',{icon:2,time:2000});
+		}else{
+			$.ajax({
+				url : '{:U("Mall/admin_delete")}',
+				type : 'POST',
+				data : {id:id},
+				success : function(data){
+					if(data.status == 1){
+						$('strong').html($('strong').html()-1);
+						$(obj).parents("tr").remove();
+						layer.msg(data.info,{icon:1,time:2000});
+					}else{
+						layer.msg(data.info,{icon:2,time:1000});
+					}
+				}
+			});	
+		}
+	});
+}
+
+
+/*管理员-编辑*/
+function admin_upload(title,url){
+	layer_show(title,url);
+}
+
+
+/*管理员-状态改变*/
+function admin_state(obj,id,sid,state){
+	var text = state == 1 ? '禁用' : '启用';
+	layer.confirm('确定要'+text,function(index){
+		if(id == sid){
+			layer.msg('无法执行此操作！',{icon:2,time:2000});
+		}else{
+			$.ajax({
+				url : "{:U('Mall/Admin_state')}",
+				type : 'POST',
+				data : {id:id,state:state},
+				success :function(data){
+					if(data.status == 1 && data.state == 0){
+						$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_state(this,'+id+','+sid+','+data.state+')" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;启用</i></a>');
+						$(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">禁用</span>');
+						$(obj).remove();
+						layer.msg(data.info,{icon: 1,time:1000});
+					}else if(data.status == 1 && data.state == 1){
+						$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_state(this,'+id+','+sid+','+data.state+')" href="javascript:;" title="禁用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;禁用</i></a>');
+						$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">启用</span>');
+						$(obj).remove();
+						layer.msg(data.info, {icon: 1,time:1000});		
+					}else{
+						layer.msg(data.info, {icon: 2,time:1000});	
+					}
+				}
+			});		
+		}
+	});
+}
+</script>
+</body>
+</html>

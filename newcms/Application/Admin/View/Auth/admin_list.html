@@ -1,0 +1,290 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<LINK rel="Bookmark" href="__PUBLIC__/Admin/images/favicon.ico" >
+<LINK rel="Shortcut Icon" href="__PUBLIC__/Admin/images/favicon.ico" >
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="lib/PIE_IE678.js"></script>
+<![endif]-->
+<link href="__PUBLIC__/Admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>账户管理</title>
+</head>
+<body>
+<nav class="breadcrumb">
+	<i class="Hui-iconfont">&#xe67f;</i> 首页 
+	<span class="c-gray en">&gt;</span> 管理员管理 
+	<span class="c-gray en">&gt;</span> 账户管理 
+	<a class="btn btn-success radius btn-refresh r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20">
+	
+	<!-- 添加管理员开始 -->
+	<form action="{:U('Auth/admin_add')}" method="post" class="form form-horizontal AdminList hide" id="form-admin-add">
+		<div class="row cl">
+			<label class="form-label col-3">所属用户组：</label>
+			<div class="formControls col-5">
+				<span class="select-box" style="width:150px;">
+					<select class="select" name="group_id" size="1"  datatype="*" nullmsg="用户组不能为空">
+						<volist name="AuthGroupList" id="vo">
+							<option value="{$vo.id}">{$vo.title}</option>
+						</volist>
+					</select>
+				</span>
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>管理员名：</label>
+			<div class="formControls col-5">
+				<input type="text" class="input-text" value="" placeholder="创建之后无法进行修改" name="username" datatype="*2-16" nullmsg="管理员不能为空">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>初始密码：</label>
+			<div class="formControls col-5">
+				<input type="password" placeholder="请输入6-18位初始密码" autocomplete="off" value="" class="input-text" datatype="*6-18" nullmsg="初始密码不能为空" name="password">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>确认密码：</label>
+			<div class="formControls col-5">
+				<input type="password" placeholder="确认新密码" autocomplete="off" class="input-text Validform_error" errormsg="您两次输入的密码不一致！" datatype="*6-18" nullmsg="请再输入一次初始密码！" recheck="password" id="newpassword2">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<div class="col-9 col-offset-3">
+				<button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存并提交</button>
+				<button class="btn btn-default radius" type="reset" onclick="list_hide()">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+	<!-- 添加管理员结束 -->
+
+	<!-- 管理员列表开始 -->
+	<div class="text-l">
+		<form class="Huiform" id="Huiform" method="post" action="">搜索：<input type="text" placeholder="账户名/角色/状态" value="" style="width: 20%;" class="input-text" id="search" onpicked="function(){table.fnFilter();}"> <input type="text" onfocus="WdatePicker({maxDate:'#F{ $dp.$D(\'maxtime\')||\'%y-%M-%d\'}', onpicked:function(){table.fnFilter();}})" id="mintime" class="input-text Wdate" style="width:120px;" placeholder="时间范围起始"> - <input type="text" onfocus="WdatePicker({minDate:'#F{ $dp.$D(\'mintime\')}',maxDate:'%y-%M-%d', onpicked:function(){table.fnFilter();}})" id="maxtime" class="input-text Wdate" style="width:120px;" placeholder="时间范围结束"><a href="javascript:;" class="btn btn-success radius ml-10"><i class="Hui-iconfont Hui-iconfont-search2"></i> 搜索</a></form>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20 mb-15"> 
+		<span class="l">
+			<if condition="authCheck('Admin/Auth/admin_add')">
+				<a href="javascript:;" onclick="admin_add('添加管理员','{:U('Auth/admin_add')}','{$AdminInfo.id}')" class="btn btn-primary radius">
+					<i class="Hui-iconfont">&#xe600;</i> 添加管理员
+				</a>
+			</if>
+		</span>
+		<span class="r">共有数据：<strong id="count"></strong> 条</span>
+	</div>
+	<table class="table table-border table-bordered table-bg table-hover table-sort" id="fond_table">
+		<thead>
+			<tr>
+				<th scope="col" colspan="9">管理员列表</th>
+			</tr>
+			<tr class="text-c">
+				<th>ID</th>
+				<th>管理员</th>
+				<th>角色</th>
+				<th>创建时间</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+	</table>
+	<!-- 管理员列表开始 -->
+</div>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/jquery/1.9.1/jquery.min.js"></script>  
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/layer/2.4/layer/layer.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/Validform/5.3.2/Validform.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/Validform/5.3.2/jquery.form.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.admin.js"></script> 
+<script type="text/javascript">
+	var table = $('.table-sort').dataTable({
+		processing: true,
+		serverSide: true,
+	    ajax: {
+	        "url":"{:U('Auth/admin_list')}",
+	        "data":function(d){
+	        	//额外传递的参数
+	        	d.search.value = $('#search').val();
+	            d.mintime = $('#mintime').val();
+	            d.maxtime = $('#maxtime').val();
+	            d.key = 'admin';
+	        }
+	    },
+		bStateSave: true,//状态保存
+		aLengthMenu : [[50, 100, 200, 500, -1], [50, 100, 200, 500, "所有"]],
+		bProcessing : true,
+		bAutoWidth: false,
+		bFilter : true, //是否启动过滤、搜索功能
+		bInfo : true, //是否显示页脚信息，DataTables插件左下角显示记录数  
+		"aoColumnDefs": [
+			// {"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+			{"orderable":false,"aTargets":[5]}// 制定列不参与排序
+		],
+		createdRow: function ( row, data, index ) {
+			$(row).addClass('text-c');
+			(index==0) && $('#count').html(data.recordsFiltered);
+		},
+	    aoColumns: [
+	        { "mData": "id" },
+	        { "mData": "username"},
+	        {
+	            "sClass": "text-center",
+	            "render": function (data, type, full, meta) {
+	                return full.getField.AuthGroup[full.group_id];
+	            },
+	            "bSortable": false
+	        },
+	        { "mData": "create_time" },
+	        {
+	            "sClass": "td-status",
+	            "data": "state",
+	            "render": function (data, type, full, meta) {
+	                var label = (data == 0) ? "<?php echo searchDict(0,'STATUSLABEL')?>" : "<?php echo searchDict(1,'STATUSLABEL')?>";
+	                var changes = (data == 0) ? "<?php echo searchDict(0,'STATUSCHANGES')?>" : "<?php echo searchDict(1,'STATUSCHANGES')?>";
+	                return '<span class="label '+label+' radius">'+changes+'</span>';
+	            },
+	            "bSortable": false
+	        },
+	        {
+	            "sClass": "td-manage",
+	            "render": function (data, type, full, meta) {
+					html = '';
+					<?php if(authCheck('Admin/Auth/admin_upload')){ ?>
+						var title = (full.state == 0) ? "<?php echo searchDict(0,'STATUSTITLE')?>" : "<?php echo searchDict(1,'STATUSTITLE')?>";
+							var confount = (full.state == 0) ? "<?php echo searchDict(0,'STATUSICONFOUNT')?>" : "<?php echo searchDict(1,'STATUSICONFOUNT')?>";
+						html += '<a title="'+title+'" style="text-decoration:none" onClick="admin_state(this,`'+full.id+'`,`{$AdminInfo.id}`,`'+full.state+'`)" href="javascript:;"><i class="Hui-iconfont">'+confount+'</i>'+title+'</a>';
+						html += '<a title="编辑" href="javascript:;" onclick="admin_upload(`编辑管理员`,`__URL__/admin_upload/id/'+full.id+'`,`'+full.id+'`,`{$AdminInfo.id}`)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i>编辑</a></if>';
+					<?php } ?>
+					<?php if(authCheck('Admin/Auth/admin_delete')){ ?>
+				    	html += '<a title="删除" href="javascript:;" onclick="admin_del(this,`'+full.id+'`,`{$AdminInfo.id}`)" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i>删除</a>';
+					<?php } ?>
+				    return html;
+	            },
+	            "bSortable": false
+	        }
+	    ]
+	});
+
+	$('#fond_table_filter').hide();//隐藏搜索框，使用自定义的搜索框
+	$("#Huiform input").on('change',function(){table.fnFilter();});
+
+	$("#form-admin-add").Validform({
+		tiptype:2,
+		ajaxPost:true,
+		showAllError:true,
+		beforeSubmit:function(curform){
+			curform.ajaxSubmit({
+				type:"POST",
+				url:"{:U('Auth/admin_add')}",
+				success:function(response, status, xhr){
+					if(response.status == 1){
+						layer.msg(response.info, {icon: 1,time:1000});
+						$("#fond_table").dataTable().fnClearTable();
+					}else{
+						layer.msg(response.info, {icon: 2,time:1000});
+					}
+				}
+			});
+			return false;
+		}
+	});
+
+	/*管理员账户-增加*/
+	function admin_add(title,url,sid){
+		if(sid == 1){
+			$('.AdminList').show();
+			$('#Huiform').hide();
+		}else{
+			layer.msg('只能超级管理员才能执行此操作！',{icon:2,time:2000});
+		}
+	}
+
+	/*管理员账户-单个删除*/
+	function admin_del(obj,id,sid){
+		if(id == sid){
+			layer.msg('无法执行删除自己的操作！',{icon:2,time:2000});
+			return false;
+		}else if(sid != 1){
+			layer.msg('只有超级管理员才能执行此操作！',{icon:2,time:2000});
+			return false;
+		}
+		layer.confirm('确认要删除吗？',function(index){
+			$.ajax({
+				url : '{:U("Auth/admin_delete")}',
+				type : 'POST',
+				data : {id:id},
+				success : function(data){
+					if(data.status == 1){
+						layer.msg(data.info,{icon:1,time:2000});
+						$("#fond_table").dataTable().fnClearTable();
+					}else{
+						layer.msg(data.info,{icon:2,time:1000});
+					}
+				}
+			});	
+		});
+	}
+
+
+	/*管理员账户-编辑*/
+	function admin_upload(title,url,id,sid){
+		if(sid == 1 || id == sid){
+			layer_show(title,url);
+		}else if(id != sid){
+			layer.msg('只能修改自己的资料！',{icon:2,time:2000});
+		}
+	}
+
+
+	/*管理员账户-状态改变*/
+	function admin_state(obj,id,sid,state){
+		if(id == sid){
+			layer.msg('无法执行禁用自己的操作！',{icon:2,time:2000});
+			return false;
+		}else if(sid != 1){
+			layer.msg('只有超级管理员才能执行此操作！',{icon:2,time:2000});
+			return false;
+		}
+
+		var text = $(obj).attr('title');
+		layer.confirm('确定要'+text+'？',function(index){
+			$.ajax({
+				url : "{:U('Auth/admin_upload')}",
+				type : 'POST',
+				data : {id:id,state:state},
+				success :function(data){
+					if(data.status == 1){
+						layer.msg(data.info, {icon: 1,time:1000});
+						$("#fond_table").dataTable().fnClearTable();
+					}else{
+						layer.msg(data.info, {icon: 2,time:1000});
+					}
+				}
+			});		
+		});
+	}
+
+	function list_hide(){$('.AdminList').hide();$('#Huiform').show();}
+</script>
+</body>
+</html>

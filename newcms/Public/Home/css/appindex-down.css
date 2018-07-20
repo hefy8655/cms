@@ -1,0 +1,102 @@
+.downApp_fixed_bottom
+    {
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+    }
+    .downApp
+    {
+        font-size: 1.3rem;
+        z-index: 25;
+        width: 100%;
+        height: 5.8rem;
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .downApp .downApp_close
+    {
+        position: absolute;
+        z-index: 30;
+        top: 0px;
+        left: 0px;
+        width: 1.9rem;
+        height: 1.9rem;
+        opacity: 0.8;
+        background: transparent url('/media/images/close45_7bce708.png') no-repeat scroll 0% 0% / 1.9rem auto;
+    }
+    ins, a
+    {
+        text-decoration: none;
+    }
+    a
+    {
+        color: #666;
+    }
+    .downApp
+    {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+
+    .downApp .downApp_Banner
+    {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        display: block;
+        width: 100%;
+    }
+    ins, a
+    {
+        text-decoration: none;
+    }
+    .downApp .downApp_logo
+    {
+        position: absolute;
+        top: 1rem;
+        left: 8%;
+        width: 4rem;
+        height: 4rem;
+        opacity: 1;
+    }
+    fieldset, img
+    {
+        border: 0px none;
+    }
+    .downApp .downApp_button
+    {
+        position: absolute;
+        top: 1.6rem;
+        left: 74%;
+        height: 2rem;
+        opacity: 1;
+    }
+    fieldset, img
+    {
+        border: 0px none;
+    }
+    .downApp .downApp_title
+    {
+        position: absolute;
+        top: 0.8rem;
+        left: 28%;
+        width: 65%;
+        text-align: left;
+        font-size: 1.5rem;
+        color: #FFF;
+    }
+    .downApp .downApp_desc
+    {
+        position: absolute;
+        top: 3.2rem;
+        left: 28%;
+        width: 65%;
+        text-align: left;
+        color: #FFF;
+    }
+    body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section
+    {
+        margin: 0px;
+        padding: 0px;
+    }

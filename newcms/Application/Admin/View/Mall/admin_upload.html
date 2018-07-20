@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="lib/PIE_IE678.js"></script>
+<![endif]-->
+<link href="__PUBLIC__/Admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/lib/icheck/icheck.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/Admin/lib/Hui-iconfont/1.0.6/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>添加管理员</title>
+</head>
+<body>
+<div class="pd-20">
+	<form action="" method="post" class="form form-horizontal" id="form-admin-add">
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>原密码：</label>
+			<div class="formControls col-5">
+				<input type="password" placeholder="请输入原密码" name="pass" value="" class="input-text" datatype="*6-8" nullmsg="原密码不能为空">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>新密码：</label>
+			<div class="formControls col-5">
+				<input type="password" placeholder="请输入新密码" autocomplete="off" value="" class="input-text" datatype="*6-8" nullmsg="新密码不能为空" name="password">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>确认新密码：</label>
+			<div class="formControls col-5">
+				<input type="password" placeholder="确认新密码" autocomplete="off" class="input-text Validform_error" errormsg="您两次输入的密码不一致！" datatype="*6-8" nullmsg="请再输入一次新密码！" recheck="password" id="newpassword2" name="newpassword2">
+			</div>
+			<div class="col-4"> </div>
+		</div>
+		<div class="row cl">
+			<div class="col-9 col-offset-3">
+				<input type="hidden" class="input-text" name="id" value="{$id}">
+				<input class="btn btn-primary radius button" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+				<input class="btn btn-default radius" type="reset" value="&nbsp;&nbsp;取消&nbsp;&nbsp;">
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/icheck/jquery.icheck.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/Validform/5.3.2/Validform.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/lib/layer/2.1/layer.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/Admin/js/H-ui.admin.js"></script> 
+<script type="text/javascript">
+$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+	$('#form-admin-add').Validform({
+		tiptype:2,
+		ajaxPost:true,
+		showAllError:true,
+		callback:function(data){
+			if(data.status == 0){
+				setInterval(function(){$('#Validform_msg').hide();},3000);//失败
+			}else if(data.status == 1){
+				setInterval(function(){layer_close();},2000);//修改别人的
+			}else if(data.status == 2){
+				setInterval(function(){window.top.location.reload();},2000);//修改自己的
+			}
+		}
+	});
+
+
+    // // 回车键事件
+    // $(document).keypress(function(e) {
+    //     if(e.which == 13){
+    //         $(".button").trigger("click");
+    //     }
+    // });
+
+	// $('.button').click(function(){
+	// 	//拿到所有的值
+	// 	var valArr = {};
+	// 	$('.input-text').each(function(){
+	// 		valArr[$(this).attr('name')] = $(this).val();
+	// 	});
+
+	// 	$.ajax({
+	// 		url : "{:U('Mall/admin_upload')}",
+	// 		type :'POST',
+	// 		data :{
+	// 			valArr:valArr,
+	// 		},
+	// 		success : function(data){
+	// 			if(data.status == 1){
+	// 				layer.msg(data.info,{icon:1,time:1000});//成功提示
+	// 				setInterval(function(){window.top.location.reload();},1000);
+	// 			}else{
+	// 				layer.msg(data.info,{icon:2,time:1000});//失败提示
+	// 				// $('input-text').val('');
+	// 			}
+	// 		}
+	// 	});
+	// });
+});
+</script>
+</body>
+</html>

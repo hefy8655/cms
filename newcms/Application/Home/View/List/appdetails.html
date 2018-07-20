@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+ <head> 
+  <meta charset="gb2312" /> 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" /> 
+  <title>{$content.title}</title> 
+  <meta name="keywords" content="{$content.keywords}" /> 
+  <meta name="description" content="{$content.description}" /> 
+  <link type="text/css" rel="stylesheet" href="__PUBLIC__/Home/css/m.css?v=112112" /> 
+  <link href="__PUBLIC__/Home/css/appindex-down.css?v=12" rel="stylesheet" /> 
+  <link href="__PUBLIC__/Home/css/style1.css?v=2112111" rel="stylesheet" /> 
+  <link href="__PUBLIC__/Home/icon/iconfont.css?v=2311" rel="stylesheet" /> 
+  <link rel="icon" href="__PUBLIC__/Home/images/favicon.ico" type="image/x-icon" /> 
+ </head> 
+ <body> 
+  <!-- 广告 start-->
+  <div class="header">
+    <p align="center">
+      <b>
+        <font size="4" color="#008000">
+          <a href="javascript:void(0);" onclick="window.history.go(-1);" style="text-decoration: none">
+            <span style="width: 15%;float: left;border-right: 1px solid #D8E9F9;color: #fff;background: #d43686;line-height: 250%;"><返回</span>
+            <font color="#FF0000">{$baseinfo.title}</font>
+          </a>
+        </font>
+<!--         <font size="4" color="#FF0000">&nbsp;</font>
+        <font size="4" color="#008000">
+          <a href="/" style="text-decoration: none"><font color="#FF0000">qweqeqqeqq</font></a>
+        </font> -->
+      </b>
+    </p>
+  </div>
+    <div class="menu" id="menu">
+     <div class="gg1">
+      <!-- 广告 -->
+      <!-- <script src="__PUBLIC__/Home/js/gg1.js"></script> -->
+     </div>
+    </div> 
+    
+    
+    <div class="wrap">
+    <div class="show">
+      <h1>{$content.title}</h1>
+      <div class="time">
+        <span>时间：{$content.create_time|date="Y-m-d",###}</span></div>
+      <div class="c">
+        {$content.content}
+      </div>
+      <div class="pagebreak pagebreak-reset">
+        <span  class="overfloellipsis" style="float:left;width:43%;font-size:14px;font-weight: bold;color:#000;">上一篇:
+          <if condition="empty($start) neq true"><a href="{:U('List/details',array('id'=>$start[id]))}">{$start[title]}</a><else/><a href="javascript:;">没有了</a></if></span>
+        <span  class="overfloellipsis" style="float:left;width:43%;font-size:14px;font-weight: bold;color:#000;">下一篇:
+          <if condition="empty($end) neq true"><a href="{:U('List/details',array('id'=>$end[id]))}">{$end[title]}</a><else/><a href="javascript:;">没有了</a></if></span>
+      </div>
+    </div>
+    <if condition="empty($end_data) neq true">
+    <ul class="article-list">
+      <volist name="end_data" id="voe">
+      <if condition="$content[id] neq $voe[id]">
+      <li>
+        <span class="overfloellipsis list-fl">
+          <a href="{:U('List/details',array('id'=>$voe[id]))}" title="{$voe[title]}">
+            <font color="#FF0000">{$voe[title]}</font></a>
+        </span>
+        <em class="fr"> {$voe.create_time|date="Y-m-d",###}</em>
+      </li>
+      </if>
+      </volist>
+    </ul>
+    </if>
+  </div>
+<script src="__PUBLIC__/Home/js/jquery-1.10.2.min.js"></script>
+<script>
+  var video_cover = "{$content.cover}";
+  var video = $('body').find('video');
+  if(video){
+    $.ajax({
+      url:"{:U('Common/getDomain')}",//这里指向的就不再是页面了，而是一个方法。
+      data:{},
+      type:'post',
+      success:function(data){
+        if(data.errorcode=='0'){
+          domain = 'http://'+data.info;
+        }else{
+          domain = '';
+        }
+        $.each(video,function(k,v){
+          var html = '<iframe src="'+domain+'/Home/common/videoPlay?url='+video.eq(k).attr('src')+'&cover='+video_cover+'" style="width: 100%;border: 0;" onload="changeFrameHeight()" class="myiframe"></iframe>';
+          video.eq(k).replaceWith(html);
+        });
+      }
+    });
+  }
+  function changeFrameHeight(){
+    $('.myiframe').css('height',document.documentElement.clientHeight*0.27);
+  }
+
+  window.onresize=function(){  
+       changeFrameHeight();  
+  }
+</script>
+
+
+
+
+    <div class="mt10"></div> 
+  
+  <div class="footer">{$content.keywords}</div>
+  <div id="top_sec" style="position: fixed;top: 76%;left: 84%;width: 50px;height: 50px;line-height: 50px;text-align: center;background: #d43686;opacity: 0.5;border-radius: 25px;color: #fff;font-size: 43px;display:none"><i class="iconfont icon-icon-test" style="font-size: 38px;"></i></div>
+    <!-- <div class="footer">APP测试</div> -->
+   <!-- 统计 -->
+  <!--  <div style="display:none">
+      <script type="text/javascript" src="__PUBLIC__/Home/js/tj (2).js"></script>
+      </div>    -->
+    <script src="__PUBLIC__/Home/js/jquery-1.10.2.min.js"></script>
+    <script>
+      $(function() {
+       $(window).scroll(function() {
+        /* 判断滚动条 距离页面顶部的距离 100可以自定义*/
+        if($(window).scrollTop() > 100) {
+         $("#top_sec").fadeIn(100); /* 这里用.show()也可以 只是效果太丑 */
+        } else {
+         $("#top_sec").fadeOut(100);
+        }
+       });
+      });
+      /* 给图片元素绑定 回到顶部的事件 */
+      $(function() {
+       $("#top_sec").on("click", function() {
+        $('body,html').animate({
+         scrollTop: 0
+        }, 1000);
+        return false;
+       });
+      });
+    </script>
+ </body>
+</html>

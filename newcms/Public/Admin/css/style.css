@@ -1,0 +1,16 @@
+@charset "utf-8";
+/* 你自己的样式 */
+.Hui-logo, .Hui-logo-m, .Hui-subtitle, .Hui-userbar {
+    color: #fff;
+}
+
+.Hui-header {
+    background-color: #222;
+}
+
+.Hui-userbar > li > a {
+    color: #fff;
+}
+a:hover {
+    text-decoration: none;
+}
